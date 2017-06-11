@@ -1,0 +1,29 @@
+\begin{thebibliography}{1}
+
+\bibitem{zadeh65}
+L.~A. Zadeh, ``Fuzzy sets,'' {\em Information and Control}, Vol.~8,
+  pp.~338--352, 1965.
+
+\bibitem{zimmermann80}
+H.~Zimmermann and P.~Zysno, ``Latent connectives in human decision making,''
+  {\em Fuzzy Sets and Systems}, Vol.~4, pp.~37--51, 1980.
+
+\bibitem{takagi85}
+T.~Takagi and M.~Sugeno, ``Fuzzy identification of systems and its application
+  to modeling and control,'' {\em IEEE Transactions on Systems, Mans and
+  Cybernetics}, Vol.~15, pp.~116--132, 1985.
+
+\bibitem{takagi93}
+H.~Takagi and M.~Lee, ``Neural networks and genetic algorithms approaches to
+  auto design of fuzzy systems,'' in Proceedings of Fuzzy Logic in Artificial
+  Intelligence, Linz, Austria, pp.~68 -- 79, 1993.
+
+\bibitem{klement00}
+E.~Klement, R.~Mesiar, and E.~Pap, Triangular Norms.
+\newblock Kluwer Academic Publishers, 2000.
+
+\bibitem{klir}
+G.~Klir and T.~Forger, Fuzzy Sets, Uncertainty and Information.
+\newblock Prentice Hall, 1988.
+
+\end{thebibliography}

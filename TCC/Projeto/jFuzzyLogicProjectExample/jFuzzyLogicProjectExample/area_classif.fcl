@@ -1,0 +1,73 @@
+/*
+	Example: A tip calculation FIS (fuzzy inference system)
+	Calculates tip based on 'servie' and 'food'
+
+	If you want to about this example (and fuzzy logic), please 
+	read Matlab's tutorial on fuzzy logic toolbox 
+	http://www.mathworks.com/access/helpdesk/help/pdf_doc/fuzzy/fuzzy.pdf
+
+									Pablo Cingolani 
+									pcingola@users.sourceforge.net
+*/
+
+FUNCTION_BLOCK tipper	// Block definition (there may be more than one block per file)
+
+VAR_INPUT				// Define input variables
+	freq : REAL;
+	satis : REAL;
+END_VAR
+
+VAR_OUTPUT				// Define output variable
+	relacao : REAL;
+END_VAR
+
+FUZZIFY freq		// Fuzzify input variable 'service': {'poor', 'good' , 'excellent'}
+	TERM poucoFrequente := (0, 1) (10, 0); 
+	TERM frequente := (5, 0) (10, 1) (20, 0);
+	TERM muitoFrequente := (15, 0) (30, 1);
+END_FUZZIFY
+
+FUZZIFY satis		// Fuzzify input variable 'service': {'poor', 'good' , 'excellent'}
+	TERM naoSatisfaz := (0, 1) (2.5, 0) ; 
+	TERM satisfazPouco := (0, 0) (2.5, 1) (5, 0);
+	TERM satisfaz := (2.5, 0) (5, 1) (7.5, 0);
+	TERM satisfazMuito := (5, 0) (7.5, 1) (10, 0);
+	TERM satisfazTotalmente := (7.5, 0) (10, 1);
+END_FUZZIFY
+
+
+DEFUZZIFY relacao			// Defzzzify output variable 'tip' : {'cheap', 'average', 'generous' }
+	TERM relacaoBaixa := (0, 1) (40, 0); 
+	TERM relacaoMedia := (20, 0) (50, 1) (80, 0);
+	TERM relacaoAlta := (60, 0) (80, 1) (100, 0);
+	TERM relacaoMuitoAlta := (80, 0) (100, 1) (100, 0);
+	METHOD : COA;		// Use 'Center Of Gravity' defuzzification method
+	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)
+END_DEFUZZIFY
+
+RULEBLOCK No1
+	OR  : MAX;
+	AND : PROD;			// Use 'min' for 'and' (also implicit use 'max' for 'or' to fulfill DeMorgan's Law)
+	ACT : PROD;			// Use 'min' activation methodx'
+	ACCU : SUM;			// Use 'max' accumulation method
+
+RULE 1 : IF freq IS poucoFrequente OR satis IS naoSatisfaz THEN relacao IS relacaoBaixa;
+RULE 2 : IF freq IS poucoFrequente AND satis IS satisfazPouco THEN relacao IS relacaoBaixa;
+RULE 3 : IF freq IS poucoFrequente AND satis IS satisfaz THEN relacao IS relacaoMedia;
+RULE 4 : IF freq IS poucoFrequente AND satis IS satisfazMuito THEN relacao IS relacaoMedia;
+RULE 5 : IF freq IS poucoFrequente AND satis IS satisfazTotalmente THEN relacao IS relacaoAlta;
+RULE 6 : IF freq IS frequente AND satis IS naoSatisfaz THEN relacao IS relacaoBaixa;
+RULE 7 : IF freq IS frequente AND satis IS satisfazPouco THEN relacao IS relacaoMedia;
+RULE 8 : IF freq IS frequente AND satis IS satisfaz THEN relacao IS relacaoMedia;
+RULE 9 : IF freq IS frequente AND satis IS satisfazMuito THEN relacao IS relacaoAlta;
+RULE 10 : IF freq IS frequente AND satis IS satisfazTotalmente THEN relacao IS relacaoAlta;
+RULE 11 : IF freq IS muitoFrequente AND satis IS naoSatisfaz THEN relacao IS relacaoMedia;
+RULE 12 : IF freq IS muitoFrequente AND satis IS satisfazPouco THEN relacao IS relacaoMedia;
+RULE 13 : IF freq IS muitoFrequente AND satis IS satisfaz THEN relacao IS relacaoAlta;
+RULE 14 : IF freq IS muitoFrequente AND satis IS satisfazMuito THEN relacao IS relacaoMuitoAlta;
+RULE 15 : IF freq IS muitoFrequente OR satis IS satisfazTotalmente THEN relacao IS relacaoMuitoAlta;
+
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
+
